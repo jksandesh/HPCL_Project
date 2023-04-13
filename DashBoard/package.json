@@ -1,0 +1,110 @@
+{
+  "name": "admin-two-vue-bulma-dashboard",
+  "version": "1.5.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host",
+    "serve": "vue-cli-service serve",
+    "serve:vite": "vite serve",
+    "build": "vue-cli-service build --modern",
+    "build:vite": "vite build",
+    "lint": "vue-cli-service lint",
+    "lint:fix": "vue-cli-service lint --fix"
+  },
+  "dependencies": {
+    "@electron/remote": "^2.0.9",
+    "@near-wallet-selector/core": "^7.9.3",
+    "@near-wallet-selector/ledger": "^7.9.3",
+    "@near-wallet-selector/modal-ui": "^7.9.3",
+    "@near-wallet-selector/my-near-wallet": "^7.9.3",
+    "@vue/composition-api": "^1.4.9",
+    "axios": "^0.19.0",
+    "brfs": "^2.0.2",
+    "browserify-fs": "^1.0.0",
+    "buefy": "^0.9.4",
+    "bulma": "^0.9.2",
+    "bulma-steps": "^2.2.1",
+    "bulma-timeline": "^3.0.5",
+    "chart.js": "^2.9.4",
+    "core-js": "^3.4.3",
+    "crypto-js": "^4.1.1",
+    "element-ui": "latest",
+    "js-sha3": "^0.8.0",
+    "keccak256": "^1.0.6",
+    "lodash": "^4.17.20",
+    "merkle-tools": "^1.4.1",
+    "merkletreejs": "^0.3.9",
+    "near-api-js": "^0.44.2",
+    "numeral": "^2.0.6",
+    "package.json": "^2.0.1",
+    "semantic-ui-css": "^2.4.1",
+    "sweetalert": "^2.1.2",
+    "vue": "^2.6.10",
+    "vue-chartjs": "^3.5.1",
+    "vue-currency-input": "1.22.3",
+    "vue-flash-message": "^0.7.2",
+    "vue-jwt-decode": "^0.1.0",
+    "vue-router": "^3.5.1",
+    "vue-stepper": "^1.4.2",
+    "vue-toasted": "^1.1.28",
+    "vuelidate": "^0.5.0",
+    "vuetify": "^2.2.11",
+    "vuex": "^3.6.2",
+    "write-excel-file": "^1.4.15"
+  },
+  "devDependencies": {
+    "@creativebulma/bulma-divider": "^1.1.0",
+    "@vue/cli-plugin-babel": "^4.5.11",
+    "@vue/cli-plugin-eslint": "^4.5.11",
+    "@vue/cli-plugin-router": "^4.5.11",
+    "@vue/cli-plugin-vuex": "^4.5.11",
+    "@vue/cli-service": "^4.5.11",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-vue": "^7.6.0",
+    "glob-parent": "^6.0.2",
+    "sass": "^1.32.7",
+    "sass-loader": "^10.1.1",
+    "vite": "^2.7.13",
+    "vite-plugin-vue2": "^1.9.2",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "eol-last": 0,
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 1,
+        "maxEOF": 0
+      }
+    ],
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "space-before-function-paren": [
+      "error",
+      "never"
+    ],
+    "rules": {
+      "indent": "off"
+    },
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

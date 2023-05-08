@@ -11,10 +11,12 @@ Vue.use(VueFlashMessage, {
 })
 
 const vm = new Vue()
-const baseURL = 'http://127.0.0.1:4000/'
+// const baseURL = 'http://127.0.0.1:4000/'
 // const baseURL = 'http://20.244.9.231:4000/'
-// const baseURL = 'http://10.90.38.35:4000/'
-const blockchainURL = 'http://10.90.38.35:8989/'
+const baseURL = 'https://verifyonblockchain.hpcl.co.in:4000/'
+const blockchainURL = 'https://verifyonblockchain.hpcl.co.in:8989/'
+// const baseURL = 'https://10.90.38.35:4000/'
+// const blockchainURL = 'http://10.90.38.35:8989/'
 
 const handleError = fn => (...params) =>
   fn(...params).catch(error => {
@@ -71,6 +73,22 @@ export const api = {
   }),
   login: handleError(async payload => {
     const res = await axios.post(baseURL + 'login', payload).catch(function (error) {
+      if (error.response.status === 403 || error.response.status === 500) {
+        router.replace('/')
+      }
+    })
+    return res.data
+  }),
+  postOnNear: handleError(async payload => {
+    const res = await axios.post(baseURL + 'setHash', payload).catch(function (error) {
+      if (error.response.status === 403 || error.response.status === 500) {
+        router.replace('/')
+      }
+    })
+    return res.data
+  }),
+  verifyOnNear: handleError(async id => {
+    const res = await axios.get(baseURL + 'getHash/' + id).catch(function (error) {
       if (error.response.status === 403 || error.response.status === 500) {
         router.replace('/')
       }

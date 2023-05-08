@@ -1,5 +1,9 @@
 <template>
   <div class="card box-info2">
+    <nav
+      id="navbar-main"
+      class="navbar is-fixed-top"
+    />
     <b-modal v-model="isImageModalActive">
       <div class="card box-info2 imag-box">
         <div class="card-content center aligned">
@@ -21,7 +25,7 @@
       <Block0 />
       <Block1 />
       <Block2 />
-      <Block3 style="margin-top: 30px" />
+      <Block3 style="margin-top: 0px" />
 
       <!--PDF Report helpers-->
       <div style="display: none">
@@ -41,8 +45,6 @@
 </template>
 
 <script>
-import { api /*  , blockchainApi */ } from '@/helpers/helpers'
-import swal from 'sweetalert'
 import Block2 from './home/Block2'
 import Block3 from './home/Block3'
 import Block0 from './home/Block0'
@@ -72,29 +74,6 @@ export default {
   methods: {
     sleep (milliseconds) {
       return new Promise(resolve => setTimeout(resolve, milliseconds))
-    },
-    async createOfflineEntry () {
-      try {
-        this.isImageModalActive = true
-        const response = await api.createOfflineData(this.offlineData)
-        if (response) {
-          setTimeout(() => {
-            this.isImageModalActive = false
-            this.$router.push('/searchPage')
-            swal('Success', 'Offline Data Updation Successful', 'success')
-          }, 5000)
-        } else {
-          swal('Error', 'Something Went Wrong', 'Error')
-        }
-        // }
-      } catch (err) {
-        const error = err.response
-        if (error.status === 409) {
-          swal('Error', error.data.message, 'error')
-        } else {
-          swal('Error', error.data.err.message, 'error')
-        }
-      }
     }
   }
 }
@@ -119,7 +98,7 @@ export default {
 }
 
 .box-info2 {
-  margin: 15px;
+  margin: 0px;
 }
 
 </style>

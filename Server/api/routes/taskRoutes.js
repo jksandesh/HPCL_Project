@@ -8,6 +8,14 @@ module.exports = app => {
     .post(taskBuilder.loginUser);
 
   app
+    .route('/setHash')
+    .post(taskBuilder.sethash);
+
+  app
+    .route('/getHash/:id')
+    .get(taskBuilder.getHash);
+
+  app
     .route('/register')
     .post(taskBuilder.registerNewUser);
 

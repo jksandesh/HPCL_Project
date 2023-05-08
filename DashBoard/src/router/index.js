@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/Login'
 import Verify from '@/views/Verify'
 import BlockchainPO from '@/views/BlockchainPO'
+import BlockchainPONEAR from '@/views/BlockchainPONEAR'
 
 Vue.use(VueRouter)
 
@@ -30,6 +31,14 @@ const routes = [
     path: '/blockchainPO',
     name: 'Blockchain PO',
     component: BlockchainPO
+  },
+  {
+    meta: {
+      title: 'Blockchain PO on NEAR'
+    },
+    path: '/blockchainPONEAR',
+    name: 'Blockchain PO on NEAR',
+    component: BlockchainPONEAR
   }
 ]
 

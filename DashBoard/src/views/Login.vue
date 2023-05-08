@@ -154,7 +154,7 @@ export default {
 }
 
 .logo-image2 {
-  width: 490px;
+  width: 400px;
   height: 490px;
   /*position: absolute;*/
   /*top: 445px;*/

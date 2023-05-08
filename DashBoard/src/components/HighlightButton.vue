@@ -1,28 +1,32 @@
 <template>
-    <div :style="{borderColor: color, background: hovering ? color: 'transparent', color: hovering ? alternateColor: color}" class="highlight-btn"
-         @mouseenter="hovering = true" @mouseleave="hovering = false">
-        <slot></slot>
-    </div>
+  <div
+    :style="{borderColor: color, background: hovering ? color: 'transparent', color: hovering ? alternateColor: color}"
+    class="highlight-btn"
+    @mouseenter="hovering = true"
+    @mouseleave="hovering = false"
+  >
+    <slot />
+  </div>
 </template>
 
 <script>
-    import { primaryColor } from "@/assets/variables.js";
-    export default {
-        name: "HighlightButton",
-        props: {
-          color: {
-              type: String,
-              required: false,
-              default: primaryColor
-          }
-        },
-        data: function() {
-            return {
-                hovering: false,
-                alternateColor: "#fff"
-            }
-        }
+import { primaryColor } from '@/assets/variables.js'
+export default {
+  name: 'HighlightButton',
+  props: {
+    color: {
+      type: String,
+      required: false,
+      default: primaryColor
     }
+  },
+  data: function () {
+    return {
+      hovering: false,
+      alternateColor: '#fff'
+    }
+  }
+}
 </script>
 
 <style scoped>

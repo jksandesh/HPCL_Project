@@ -44,6 +44,20 @@
             Select PO's
           </b-button>
         </div>
+        <div class="column">
+          <b-button
+            class="btn is-primary are-medium is-medium"
+            style="margin-left: 5px"
+            type="is-black"
+            :loading="isLoading"
+            @click="goToNear()"
+          >
+            Commit on NEAR Blockchain
+          </b-button>
+        </div>
+        <div class="column" />
+        <div class="column" />
+        <div class="column" />
         <div class="column" />
         <div class="column" />
         <div class="column" />
@@ -156,22 +170,22 @@
         </div>
       </div>
     </div>
+    <nav-bar />
   </div>
 </template>
 
 <script>
 // import axios from 'axios'
+import NavBar from '@/components/NavBar'
 import { blockchainApi } from '@/helpers/helpers'
 import ModalBox from '@/components/ModalBox.vue'
 import swal from 'sweetalert'
 import { keccak256 } from 'js-sha3'
-// import * as nearAPI from 'near-api-js'
-import { Wallet } from '@/helpers/near-wallet'
 const path = require('path')
 
 export default {
   name: 'SearchPage',
-  components: { ModalBox },
+  components: { ModalBox, NavBar },
   props: {
     dataUrl: {
       type: String,
@@ -193,42 +207,6 @@ export default {
       selectedFiles: [],
       hashes: [],
       finalData: []
-    }
-  },
-  async mounted () {
-    /* const { keyStores, connect, WalletConnection } = nearAPI
-    const myKeyStore = new keyStores.BrowserLocalStorageKeyStore()
-    const connectionConfig = {
-      networkId: 'testnet',
-      keyStore: myKeyStore, // first create a key store
-      nodeUrl: 'https://rpc.testnet.near.org',
-      walletUrl: 'https://wallet.testnet.near.org',
-      helperUrl: 'https://helper.testnet.near.org',
-      explorerUrl: 'https://explorer.testnet.near.org'
-    }
-    const nearConnection = await connect(connectionConfig)
-    // create wallet connection
-    const walletConnection = new WalletConnection(nearConnection, 'hpcl')
-    walletConnection.requestSignIn({
-      contractId: 'near.hpcl.testnet',
-      methodNames: [], // optional
-      successUrl: 'http://localhost:8080/blockchainPO', // optional redirect URL on success
-      failureUrl: 'REPLACE_ME://.com/failure' // optional redirect URL on failure
-    })
-    if (walletConnection.isSignedIn()) {
-      console.log('Signed IN')
-    } */
-    const wallet = new Wallet({ createAccessKeyFor: 'hpcl.testnet' })
-    const isSignedIn = await wallet.startUp()
-    if (isSignedIn) {
-      console.log('YESSSS')
-      // console.log(await wallet.callMethod({ method: 'set_hash', args: { hash: 'Riston' }, contractId: 'hpcl.testnet' }))
-      // console.log(await wallet.viewMethod({ method: 'get_hash', args: { hash: 'Sandesh' }, contractId: 'hpcl.testnet' }))
-      console.log(await wallet.viewMethod({ method: 'get_all_hashes', contractId: 'hpcl.testnet' }))
-    } else {
-      console.log('NOOOOO')
-      const accounts = await wallet.signIn({ contractId: 'hpcl.testnet' })
-      console.log(accounts)
     }
   },
   methods: {
@@ -357,6 +335,9 @@ export default {
       }
       await readFile(0)
       this.hashes = hashesl
+    },
+    async goToNear () {
+      await this.$router.replace('/blockchainPONEAR')
     },
     async selectFile (multiple) {
       return new Promise(resolve => {

@@ -27,52 +27,6 @@
       :class="{'is-active':isMenuNavBarActive}"
     >
       <div class="navbar-end">
-        <nav-bar-menu class="has-user-avatar">
-          <div class="is-user-name">
-            <span>{{ username }}</span>
-          </div>
-          <div
-            slot="dropdown"
-            class="navbar-dropdown"
-          >
-            <router-link
-              v-if="userType === 'Super-Admin'"
-              to="/profile"
-              class="navbar-item"
-              exact-active-class="is-active"
-            >
-              <b-icon
-                icon="account"
-                custom-size="default"
-              />
-              <span>Change Password</span>
-            </router-link>
-            <router-link
-              v-if="userType === 'Sub-Admin'"
-              to="/help"
-              class="navbar-item"
-              exact-active-class="is-active"
-            >
-              <b-icon
-                icon="email"
-                custom-size="default"
-              />
-              <span>Help</span>
-            </router-link>
-            <router-link
-              v-if="userType === 'Agency-Admin'"
-              to="/help"
-              class="navbar-item"
-              exact-active-class="is-active"
-            >
-              <b-icon
-                icon="email"
-                custom-size="default"
-              />
-              <span>Help</span>
-            </router-link>
-          </div>
-        </nav-bar-menu>
         <a
           class="navbar-item"
           title="Log out"
@@ -90,14 +44,12 @@
 </template>
 
 <script>
-import NavBarMenu from '@/components/NavBarMenu.vue'
 import { mapState } from 'vuex'
 import VueJwtDecode from 'vue-jwt-decode'
 import axios from 'axios'
 export default {
   name: 'NavBar',
   components: {
-    NavBarMenu
   },
   data () {
     return {

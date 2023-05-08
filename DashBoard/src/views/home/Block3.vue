@@ -6,6 +6,39 @@
   >
     <div class="block3-headline">
       <div class="headline-line" />
+      <span style="background: #fff; padding: 0 10px; z-index: 1" />
+    </div>
+    <div class="content">
+      <div class="issuance">
+        <div class="header">
+          Initiated By
+        </div>
+        <div class="step">
+          <div>
+            <img
+              class="process_img"
+              src="@/assets/hpcl_zupple.png"
+            >
+          </div>
+        </div>
+      </div>
+      <div class="split" />
+      <div class="verification">
+        <div class="header">
+          Powered By
+        </div>
+        <div class="step">
+          <div class="block3-headline">
+            <img
+              class="process_img"
+              src="@/assets/zupple_near.png"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="block3-headline">
+      <div class="headline-line" />
       <span style="background: #fff; padding: 0 10px; z-index: 1">HOW IT WORKS?</span>
     </div>
     <div class="content">
@@ -28,10 +61,10 @@
           <div>
             <b>2.</b> Digital fingerprints are digitally signed by the issuer and published onto
             <a
-              href=""
+              href="https://near.org/"
               target="_blank"
               style="text-decoration: none"
-            >HPCL Private Blockchain</a>.
+            >NEAR and HPCL Private Blockchain</a>.
           </div>
           <div>
             <img

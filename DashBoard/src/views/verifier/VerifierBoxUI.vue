@@ -8,19 +8,13 @@
               class="imag"
               src="../../assets/giphy.gif"
             >
-            <p class="title is-3 has-text-centered">
+            <p class="title is-4 has-text-centered">
               Verifying Purchase Order on Blockchain
             </p>
           </div>
         </div>
       </b-modal>
       <div style="display: flex; flex-direction: column; align-items: center">
-        <div class="image logo-image1">
-          <img src="../../assets/HP.png">
-        </div>
-        <div class="image logo-image2">
-          <img src="../../assets/hpcl2.jpg">
-        </div>
         <div class="verify-hint">
           Verify LegitDoc - HPCL Purchase Orders
         </div>
@@ -81,8 +75,7 @@
 <script>
 import { makeDragAndDroppable } from '@/utils/ui-helper'
 import { isIE11 } from '@/assets/utils'
-import { blockchainApi } from '@/helpers/helpers'
-// eslint-disable-next-line camelcase
+import { api, blockchainApi } from '@/helpers/helpers'
 import { keccak256 } from 'js-sha3'
 import path from 'path'
 import swal from 'sweetalert'
@@ -212,23 +205,29 @@ export default {
       console.log('lgtKeyDataJSON--:' + lgtKeyDataJSON)
       const fileHash = keccak256(originalPDFData).toString('hex').toLowerCase()
       console.log('File_Hash--:' + fileHash)
-      if (lgtKeyDataJSON.toString().toLocaleLowerCase() !== fileHash.toString().toLocaleLowerCase()) {
-        this.isImageModalActive = false
-        await swal('Error', 'This Document is not a valid Blockchain based Purchase Order !! \n Please contact admin@hpcl.com', 'error')
-        return
-      }
-      try {
-        const response = await blockchainApi.getOnePO(fileHash)
-        console.log(response)
-        if (response) {
-          const res = JSON.parse(response.response)
-          const clean = JSON.stringify(res, null, '\t')
-          const podata = JSON.parse(clean)
-          console.log('RES--:' + podata.docHash)
-          if (fileHash.toString().toLocaleLowerCase() === podata.docHash.toString().toLocaleLowerCase()) {
+
+      if (lgtKeyDataJSON.toString().includes('poId')) {
+        try {
+          var keyData = JSON.parse(lgtKeyDataJSON)
+          console.log('Root--->' + keyData.temp1)
+          var nearRoot = await api.verifyOnNear(keyData.temp1)
+          console.log('NEAR-->' + nearRoot.hash)
+          if (nearRoot.hash === keyData.temp1) {
             setTimeout(async () => {
               this.isImageModalActive = false
-              await swal('Success', 'Successfully Verified on Blockchain \n Issued By : ' + podata.issuer + '\n Issued On : ' + podata.date + '\n Transaction Hash : ' + podata.docHash + '\n Doc Validity : ' + 'Valid', 'success')
+              // await swal('Success', 'Successfully Verified on Blockchain \n Issued By : ' + keyData.issuer + '\n Issued On : ' + keyData.date + '\n Transaction Hash : ' + keyData.docHash + '\n Doc Validity : ' + 'Valid', 'success')
+              // await swal('Success', 'Successfully Verified on Blockchain \n Issued By : ' + keyData.issuer + '\n Issued On : ' + keyData.date + '\n Transaction Hash : ' + keyData.docHash + '\n Doc Validity : ' + 'Valid' + '\n View on Near : ' + 'https://explorer.mainnet.near.org/transactions/ByGYAsVmMRmgKEFNzc4RtEWsdgK2jwZafo5Ph1Vcbmqe', 'success')
+              await swal({
+                text: 'Successfully Verified on Blockchain \n Issued By : ' + keyData.issuer + '\n Issued On : ' + keyData.date + '\n Transaction Hash : ' + keyData.docHash + '\n Doc Validity : ' + 'Valid',
+                icon: 'success',
+                content: {
+                  element: 'a',
+                  attributes: {
+                    text: 'View On NEAR Blockchain',
+                    href: 'https://explorer.mainnet.near.org/transactions/' + keyData.temp3
+                  }
+                }
+              })
               await this.$router.go('/verify')
             }, 5000)
           } else {
@@ -238,15 +237,49 @@ export default {
               await this.$router.go('/verify')
             }, 5000)
           }
-        } else {
-          swal('Error', 'Something Went Wrong', 'error')
+        } catch (err) {
+          const error = err.response
+          if (error.status === 409) {
+            swal('Error', error.data.message, 'error')
+          } else {
+            swal('Error', error.data.err.message, 'error')
+          }
         }
-      } catch (err) {
-        const error = err.response
-        if (error.status === 409) {
-          swal('Error', error.data.message, 'error')
-        } else {
-          swal('Error', error.data.err.message, 'error')
+      } else if (lgtKeyDataJSON.toString().toLocaleLowerCase() !== fileHash.toString().toLocaleLowerCase()) {
+        this.isImageModalActive = false
+        await swal('Error', 'This Document is not a valid Blockchain based Purchase Order !! \n Please contact admin@hpcl.com', 'error')
+      } else {
+        try {
+          const response = await blockchainApi.getOnePO(fileHash)
+          console.log(response)
+          if (response) {
+            const res = JSON.parse(response.response)
+            const clean = JSON.stringify(res, null, '\t')
+            const podata = JSON.parse(clean)
+            console.log('RES--:' + podata.docHash)
+            if (fileHash.toString().toLocaleLowerCase() === podata.docHash.toString().toLocaleLowerCase()) {
+              setTimeout(async () => {
+                this.isImageModalActive = false
+                await swal('Success', 'Successfully Verified on Blockchain \n Issued By : ' + podata.issuer + '\n Issued On : ' + podata.date + '\n Transaction Hash : ' + podata.docHash + '\n Doc Validity : ' + 'Valid', 'success')
+                await this.$router.go('/verify')
+              }, 5000)
+            } else {
+              setTimeout(async () => {
+                this.isImageModalActive = false
+                await swal('Error', 'This Document is not a valid Blockchain based Purchase Order !! \n Please contact admin@hpcl.com', 'error')
+                await this.$router.go('/verify')
+              }, 5000)
+            }
+          } else {
+            swal('Error', 'Something Went Wrong', 'error')
+          }
+        } catch (err) {
+          const error = err.response
+          if (error.status === 409) {
+            swal('Error', error.data.message, 'error')
+          } else {
+            swal('Error', error.data.err.message, 'error')
+          }
         }
       }
     },
@@ -352,19 +385,15 @@ $dragDropHeight: 20;
 }
 
 .logo-image1 {
-  width: 140px;
-  height: 90px;
-  position: absolute;
-  top: 15px;
-  left: 0%;
+  width: 120px;
+  height: 80px;
+  margin-bottom: 10px;
 }
 
 .logo-image2 {
-  width: 250px;
-  height: 120px;
-  position: absolute;
-  top: 18px;
-  left: 9%;
+  width: 180px;
+  height: 80px;
+  margin-bottom: 10px;
 }
 .mobile .arrow {
   width: #{$mobileBoxWidth}px;

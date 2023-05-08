@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dataOperator = mongoose.model('dataEntry')
+const nearAPI = require("near-api-js");
+const { keyStores, KeyPair, Contract } = nearAPI;
+const myKeyStore = new keyStores.InMemoryKeyStore();
+const PRIVATE_KEY = "ed25519:5wkMB2sZqhDGS3FudZpCu5WP4cP9EBSsbf9LKZVTnKqHc6oci9A5NQVD1fJ4Hbuj4toXJ3QLTmm1vMAwnsqfCm7i";// creates a public / private key pair using the provided private key
+const keyPair = KeyPair.fromString(PRIVATE_KEY);
 
 exports.read_a_subAdmin = (req, res) => {
   dataOperator.findById(req.params.subAdminId, (err, subAdmin) => {
@@ -51,6 +56,63 @@ findByCredentials = async (username, password) => {
     throw new Error({ error: "Invalid login details" });
   }
   return user;
+};
+
+exports.sethash = async (req, res) => {
+  try {
+    console.log(req.body.hash)
+    await myKeyStore.setKey("mainnet", "zupple_hpcl.near", keyPair);
+    const { connect, Contract } = nearAPI;
+
+    const connectionConfig = {
+      networkId: "mainnet",
+      keyStore: myKeyStore, // first create a key store
+      nodeUrl: "https://rpc.mainnet.near.org",
+      walletUrl: "https://wallet.mainnet.near.org",
+      helperUrl: "https://helper.mainnet.near.org",
+      explorerUrl: "https://explorer.mainnet.near.org",
+    };
+    const methodOptions = {
+      viewMethods: ['get_hash', 'get_all_hashes'],
+      changeMethods: ['set_hash']
+    };
+    const nearConnection = await connect(connectionConfig);
+    const account = await nearConnection.account("zupple_hpcl.near");
+    const contract = new Contract(account, 'zupple_hpcl.near', methodOptions);
+    const hash = await contract.set_hash({ hash: req.body.hash })
+    console.log('Here');
+    console.log(hash);
+    res.status(201).json({ hash });
+  } catch (err) {
+    res.status(400).json({ err: err });
+  }
+};
+
+exports.getHash = async (req, res) => {
+  try {
+    await myKeyStore.setKey("mainnet", "zupple_hpcl.near", keyPair);
+    const { connect, Contract } = nearAPI;
+
+    const connectionConfig = {
+      networkId: "mainnet",
+      keyStore: myKeyStore, // first create a key store
+      nodeUrl: "https://rpc.mainnet.near.org",
+      walletUrl: "https://wallet.mainnet.near.org",
+      helperUrl: "https://helper.mainnet.near.org",
+      explorerUrl: "https://explorer.mainnet.near.org",
+    };
+    const methodOptions = {
+      viewMethods: ['get_hash', 'get_all_hashes'],
+      changeMethods: ['set_hash']
+    };
+    const nearConnection = await connect(connectionConfig);
+    const account = await nearConnection.account("zupple_hpcl.near");
+    const contract = new Contract(account, 'zupple_hpcl.near', methodOptions);
+    const hash = await contract.get_hash({ hash: req.params.id})
+    res.status(201).json({ hash });
+  } catch (err) {
+    res.status(400).json({ err: err });
+  }
 };
 
 exports.loginUser = async (req, res) => {

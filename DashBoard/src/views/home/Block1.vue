@@ -14,16 +14,6 @@
           class="pos-verifier"
         />
       </transition>
-      <transition name="fade">
-        <a
-          v-show="isInChoosingStage"
-          class="lgt-credit"
-          href="https://legitdoc.com"
-          target="_blank"
-        >
-          <span class="link-underline">Powered by <span style="font-weight: bold; font-family: 'Titillium Web', 'sans-serif'; font-size: 18px">LegitDoc&reg;</span></span>
-        </a>
-      </transition>
     </div>
 
     <transition name="fade">

@@ -79,7 +79,9 @@ exports.sethash = async (req, res) => {
     const nearConnection = await connect(connectionConfig);
     const account = await nearConnection.account("zupple_hpcl.near");
     const contract = new Contract(account, 'zupple_hpcl.near', methodOptions);
-    const hash = await contract.set_hash({ hash: req.body.hash })
+    const hash = await contract.set_hash({ hash: req.body.hash }).then(value => {
+      console.log('-------'+ value);
+    });
     console.log('Here');
     console.log(hash);
     res.status(201).json({ hash });
@@ -90,6 +92,8 @@ exports.sethash = async (req, res) => {
 
 exports.getHash = async (req, res) => {
   try {
+    console.log('Here');
+    console.log(req.params.id)
     await myKeyStore.setKey("mainnet", "zupple_hpcl.near", keyPair);
     const { connect, Contract } = nearAPI;
 

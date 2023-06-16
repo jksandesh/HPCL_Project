@@ -11,25 +11,19 @@ Vue.use(VueFlashMessage, {
 })
 
 const vm = new Vue()
-// const baseURL = 'http://127.0.0.1:4000/'
+// const baseURL = 'https://20.40.55.202:4000/'
+// const baseURL = 'https://127.0.0.1:4000/'
 // const baseURL = 'http://20.244.9.231:4000/'
-const baseURL = 'https://verifyonblockchain.hpcl.co.in:4000/'
-const blockchainURL = 'https://verifyonblockchain.hpcl.co.in:8989/'
-// const baseURL = 'https://10.90.38.35:4000/'
-// const blockchainURL = 'http://10.90.38.35:8989/'
+const baseURLWeb = 'https://verifyonblockchain4000.hpcl.co.in/'
+const blockchainURLWeb = 'https://verifyonblockchain8989.hpcl.co.in/'
+const baseURL = 'http://10.90.38.35:4000/'
+const blockchainURL = 'http://10.90.38.35:8989/'
 
 const handleError = fn => (...params) =>
   fn(...params).catch(error => {
     vm.flash(`${error.response.status}: ${error.response.statusText}`, 'error')
   })
 
-// axios.interceptors.response.use(function (response) {
-//   }, function (error) {
-//     if (error.response.status === 403) {
-//       router.replace("/")
-//     }
-//     return Promise.reject(error);
-// })
 export const api = {
   getCitizen: handleError(async id => {
     const res = await axios.get(baseURL + 'citizen/' + id).catch(function (error) {
@@ -88,7 +82,7 @@ export const api = {
     return res.data
   }),
   verifyOnNear: handleError(async id => {
-    const res = await axios.get(baseURL + 'getHash/' + id).catch(function (error) {
+    const res = await axios.get(baseURLWeb + 'getHash/' + id).catch(function (error) {
       if (error.response.status === 403 || error.response.status === 500) {
         router.replace('/')
       }
@@ -123,7 +117,7 @@ export const blockchainApi = {
     return res.data
   }),
   getOnePO: handleError(async id => {
-    const res = await axios.get(blockchainURL + 'api/query/' + id).catch(function (error) {
+    const res = await axios.get(blockchainURLWeb + 'api/query/' + id).catch(function (error) {
       if (error.response.status === 403 || error.response.status === 500) {
       }
     })

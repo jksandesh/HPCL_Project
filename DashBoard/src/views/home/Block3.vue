@@ -75,7 +75,7 @@
         </div>
         <div class="step">
           <div>
-            <b>3.</b> Unqiue blockchain proofs are computed and attached to Purchase Order PDF to form <span style="display:inline-block">blockchain-enabled</span> Purchase Order, subsequently issued to vendors.
+            <b>3.</b> Unqiue blockchain proofs are computed and attached to Purchase Order PDF to form <span style="display:inline-block">blockchain-enabled</span> Purchase Order, subsequently issued to vendors. Vendors can download these purchase orders through the HPCL vendor self-service portal
           </div>
           <div>
             <img
@@ -92,7 +92,7 @@
         </div>
         <div class="step">
           <div>
-            <b>1.</b> Verifier uploads Purchase Order_legitdoc.pdf to the verification portal.
+            <b>1.</b> Verifier uploads Purchase Order pdf downloaded from vendor self-service portal to the HPCL verification portal.
           </div>
           <div>
             <img

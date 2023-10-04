@@ -16,7 +16,7 @@
       </b-modal>
       <div style="display: flex; flex-direction: column; align-items: center">
         <div class="verify-hint">
-          Verify LegitDoc - HPCL Purchase Orders
+          Verify - HPCL Purchase Orders
         </div>
         <div
           class="verify-box"
@@ -142,7 +142,7 @@ export default {
         var bin = e.target.result
         var uintArray = new Uint8Array(bin)
         console.log('>>>' + bin)
-        await that.readLGTPDF(Buffer.from(uintArray))
+        await that.readLGTPDF(Buffer.from(uintArray), pdfFile.name)
       }
       reader.readAsArrayBuffer(pdfFile)
       console.log('-->' + fileName)
@@ -180,7 +180,7 @@ export default {
       }
       return i
     },
-    async readLGTPDF (pdfData) {
+    async readLGTPDF (pdfData, filename) {
       console.log('Here')
       const startXRefPos1 = this.getStartXRefPosition(pdfData) // find 'startxref' start position in modified data.
       const lgtKeyPos = this.getLegitDocKeyPos(pdfData, startXRefPos1) // find 'lgt_ket start position in modified data.
@@ -202,23 +202,23 @@ export default {
       // console.log('originalPDFData' + originalPDFData)
       const LGT_USER_KEY = pdfData.slice(lgtKeyPos, startXRefPos1).toString('utf-8')
       const lgtKeyDataJSON = this.getBetween(LGT_USER_KEY, '<--LEGITDOC_KEY-->', '<--LEGITDOC_KEY-->')
-      console.log('lgtKeyDataJSON--:' + lgtKeyDataJSON)
+      // console.log('lgtKeyDataJSON--:' + lgtKeyDataJSON)
       const fileHash = keccak256(originalPDFData).toString('hex').toLowerCase()
-      console.log('File_Hash--:' + fileHash)
+      console.log('PO_Name--:' + filename.toString().split('_')[0])
 
       if (lgtKeyDataJSON.toString().includes('poId')) {
         try {
           var keyData = JSON.parse(lgtKeyDataJSON)
-          console.log('Root--->' + keyData.temp1)
+          // console.log('Root--->' + keyData.temp1)
           var nearRoot = await api.verifyOnNear(keyData.temp1)
-          console.log('NEAR-->' + nearRoot.hash)
+          // console.log('NEAR-->' + nearRoot.hash)
           if (nearRoot.hash === keyData.temp1) {
             setTimeout(async () => {
               this.isImageModalActive = false
               // await swal('Success', 'Successfully Verified on Blockchain \n Issued By : ' + keyData.issuer + '\n Issued On : ' + keyData.date + '\n Transaction Hash : ' + keyData.docHash + '\n Doc Validity : ' + 'Valid', 'success')
               // await swal('Success', 'Successfully Verified on Blockchain \n Issued By : ' + keyData.issuer + '\n Issued On : ' + keyData.date + '\n Transaction Hash : ' + keyData.docHash + '\n Doc Validity : ' + 'Valid' + '\n View on Near : ' + 'https://explorer.mainnet.near.org/transactions/ByGYAsVmMRmgKEFNzc4RtEWsdgK2jwZafo5Ph1Vcbmqe', 'success')
               await swal({
-                text: 'Successfully Verified on Blockchain \n Issued By : ' + keyData.issuer + '\n Issued On : ' + keyData.date + '\n Transaction Hash : ' + keyData.docHash + '\n Doc Validity : ' + 'Valid',
+                text: 'Successfully Verified on Blockchain \n Issued By : ' + keyData.issuer + '\n PO Number: ' + filename.toString().split('_')[0] + '\n Anchored to Blockchain on: ' + keyData.date + '\n Transaction Hash : ' + keyData.docHash + '\n PO Validity : ' + 'Valid',
                 icon: 'success',
                 content: {
                   element: 'a',
@@ -256,11 +256,14 @@ export default {
             const res = JSON.parse(response.response)
             const clean = JSON.stringify(res, null, '\t')
             const podata = JSON.parse(clean)
-            console.log('RES--:' + podata.docHash)
+            // console.log('RES--:' + podata.docHash)
             if (fileHash.toString().toLocaleLowerCase() === podata.docHash.toString().toLocaleLowerCase()) {
               setTimeout(async () => {
                 this.isImageModalActive = false
-                await swal('Success', 'Successfully Verified on Blockchain \n Issued By : ' + podata.issuer + '\n Issued On : ' + podata.date + '\n Transaction Hash : ' + podata.docHash + '\n Doc Validity : ' + 'Valid', 'success')
+                await swal({
+                  text: 'Successfully Verified on Blockchain \n\n Issued By : ' + podata.issuer + '\n\n PO Number: ' + filename.toString().split('_')[0] + '\n\n Anchored to Blockchain on: ' + podata.date + '\n\n PO Validity : ' + 'Valid' + '\n\n Transaction Hash : ' + podata.docHash,
+                  icon: 'success'
+                })
                 await this.$router.go('/verify')
               }, 5000)
             } else {
@@ -315,6 +318,11 @@ $borderRadius: 30;
   width: #{$mobileBoxWidth}px;
 }
 
+.custom-swal-popup {
+  width: 800px; /* Set your desired width */
+  height: 200px; /* Set your desired height */
+}
+
 .imag-box{
   width: 400px;
   height: 450px;
@@ -334,7 +342,7 @@ $borderRadius: 30;
 $dragDropHeight: 20;
 .dragdrop {
   width: #{$boxWidth - $border*2}px;
-  height: #{$boxHeight/2 + $dragDropHeight}px;
+  height: #{$boxHeight*.5 + $dragDropHeight}px;
   border-radius: #{$borderRadius - $border*1.5}px;
   background: #fff;
   display: flex;

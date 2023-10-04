@@ -24,7 +24,7 @@
       />
       <project-highlight-item
         icon-name="privacy_person.png"
-        description="<b>Easily Verifiable</b>, and customer-owned digital Purchase Orders."
+        description="<b>Easily Verifiable</b>, HPCL digital Purchase Orders."
       />
       <project-highlight-item
         icon-name="clock_speed.png"

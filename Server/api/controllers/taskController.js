@@ -81,9 +81,10 @@ exports.sethash = async (req, res) => {
     const contract = new Contract(account, 'zupple_hpcl.near', methodOptions);
     const hash = await contract.set_hash({ hash: req.body.hash }).then(value => {
       console.log('-------'+ value);
+      this.hash = value
     });
     console.log('Here');
-    console.log(hash);
+    console.log(this.hash);
     res.status(201).json({ hash });
   } catch (err) {
     res.status(400).json({ err: err });
